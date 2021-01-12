@@ -14,7 +14,7 @@ namespace TB
         
         static void Main(string[] args)
         {
-            BOT = new Telegram.Bot.TelegramBotClient("1425687539:AAGg2GwqV4fe3A8WEnjKREhkyyC40ZwLFCs");
+            BOT = new Telegram.Bot.TelegramBotClient("");
 
             BOT.OnMessage += BotOnMessageReceived;
             BOT.StartReceiving();
