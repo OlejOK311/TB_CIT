@@ -4,7 +4,9 @@ using System.Linq;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
-using Telegram.Bot.Types.ReplyMarkups;
+using MessagingToolkit.QRCode.Codec;
+using MessagingToolkit.QRCode.Codec.Data;
+using System.Drawing;
 
 namespace TB
 {
@@ -16,14 +18,26 @@ namespace TB
         {
             BOT = new Telegram.Bot.TelegramBotClient("");
 
-            BOT.OnMessage += BotOnMessageReceived;
+            BOT.OnMessage += BotOnTxtMessageReceived;
+            BOT.OnMessage += BotOnImgMessageReceived;
             BOT.StartReceiving();
 
             Console.ReadKey();
             BOT.StopReceiving();
         }
 
-        private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        private static async void BotOnImgMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        {
+            Telegram.Bot.Types.Message msg = messageEventArgs.Message;
+            if (msg != null && msg.Type == MessageType.Photo)
+            {
+                //QRCodeDecoder decoder = new QRCodeDecoder();
+                //await BOT.SendTextMessageAsync(msg.Chat.Id, decoder.Decode(new QRCodeBitmapImage(pictureBox1.Image as Bitmap)));
+                await BOT.SendTextMessageAsync(msg.Chat.Id, "Да");
+            }
+        }
+
+        private static async void BotOnTxtMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             Telegram.Bot.Types.Message msg = messageEventArgs.Message;
             if (msg != null && msg.Type == MessageType.Text)
@@ -73,12 +87,12 @@ namespace TB
                         }
                         else
                         {
-                            /*foreach (PhoneNumber r in result)
+                            foreach (PhoneNumber r in result)
                             {
                                 await BOT.SendTextMessageAsync(msg.Chat.Id, r.Name.ToString()+" "+r.Phone.ToString());
-                            };*/
+                            };
 
-                            try
+                            /*try
                             {
                                 foreach (PhoneNumber r in result)
                                 {
@@ -88,7 +102,7 @@ namespace TB
                             catch
                             {
                                 await BOT.SendTextMessageAsync(msg.Chat.Id, "Отправлено слишком много запросов. Повторите через 24 часа.");
-                            }
+                            }*/
 
                             break;
                         }
